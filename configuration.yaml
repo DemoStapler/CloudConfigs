@@ -1,0 +1,112 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret Lat_Home
+  longitude: !secret Long_Home
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 0
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Australia/Melbourne
+  # Customization file
+  customize: !include customize.yaml
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Show the introduction message on startup.
+#introduction:
+
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: http://192.168.20.13:3218
+  tasmoadmin:
+    title: TasmoAdmin
+    icon: mdi:lightbulb-on
+    url: http://192.168.20.13:9541
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Discover some devices automatically
+discovery:
+
+# Sensors
+sensor:
+  # Weather prediction
+  - platform: yr
+
+# Text to speech
+tts:
+  - platform: google
+  
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+frontend:
+  javascript_version: latest
+  themes: !include themes/cleardark.yaml 
+
+
+zone:
+  - name: Pool
+    latitude: !secret Lat_Pool
+    longitude: !secret Long_Pool
+    radius: 100
+    icon: mdi:pool
+
+  - name: Roar
+    latitude: !secret Lat_Roar
+    longitude: !secret Long_Roar
+    radius: 100
+    icon: mdi:filmstrip
+    
+  - name: Link
+    latitude: !secret Lat_Link
+    longitude: !secret Long_Link
+    radius: 100
+    icon: mdi:car-door
+    
+  - name: Moorool
+    latitude: !secret Lat_Moorool
+    longitude: !secret Long_Moorool
+    radius: 100
+    icon: mdi:castle
+  
+  - name: Grand
+    latitude: !secret Lat_Grand
+    longitude: !secret Long_Grand
+    radius: 100
+    icon: mdi:cookie
+    
+  - name: Claire
+    latitude: !secret Lat_Claire
+    longitude: !secret Long_Claire
+    radius: 100
+    icon: mdi:home-heart   
+#googlehome:
+#  devices:
+#    - host: 192.168.20.20
+#      track_alarms: true
+
+switch:
+    platform: mqtt
+    name: "HiFi"
+    command_topic: "cmnd/BrilliantPlug01/power"
+    state_topic: "stat/BrilliantPlug01/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+    
+cloud:
+  google_actions:
+    filter:
+      include_entities:
+        - switch.hifi
+        - media_player.ps4_2

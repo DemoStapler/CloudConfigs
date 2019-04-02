@@ -110,3 +110,5 @@ cloud:
       include_entities:
         - switch.hifi
         - media_player.ps4_2
+        
+#GitTest
